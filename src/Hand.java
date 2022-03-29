@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -64,12 +65,60 @@ public class Hand implements Handable , TestableHand{
 
     @Override
     public int compareTo(Handable handable) {
-        return 0;
+        String selfEvaluation = evaluateHand();
+        String[] selfSplit = selfEvaluation.split(",",0);
+        String otherEvaluation = handable.evaluateHand();
+        String[] otherSplit = otherEvaluation.split(",",0);
+        if(!selfSplit[0].equals(otherSplit[0])){
+            return ranking(otherSplit[0]) - ranking(selfSplit[0]);
+        }
+        else {
+            //straight flush , straight, flush tie-breaking
+            if(ranking(selfSplit[0]) == 2 || ranking(selfSplit[0]) == 5 || ranking(selfSplit[0]) == 6){
+                return getValue(String.valueOf( selfSplit[1].charAt(0) )) - getValue(String.valueOf( otherSplit[1].charAt(0) ));
+            }
+            //Four of a kind and full house tie-breaker
+            else if(ranking(selfSplit[0]) == 3 || ranking(selfSplit[0]) == 4){
+                if(getValue(selfSplit[1]) == getValue(otherSplit[1]))
+                    return getValue(selfSplit[2]) - getValue(otherSplit[2]);
+                else return getValue(selfSplit[1]) - getValue(otherSplit[1]);
+            }
+            //Three of a kind and two pairs tie-breaking
+            else if(ranking(selfSplit[0]) == 7 || ranking(selfSplit[0]) == 8) {
+                if(getValue(selfSplit[1]) == getValue(otherSplit[1]))
+                    if(getValue(selfSplit[2]) == getValue(otherSplit[2]))
+                        return getValue(selfSplit[3]) - getValue(otherSplit[3]);
+                    else return getValue(selfSplit[2]) - getValue(otherSplit[2]);
+                else return getValue(selfSplit[1]) - getValue(otherSplit[1]);
+            }
+            //pair tie-breaking
+            else if(ranking(selfSplit[0]) == 9) {
+                if(getValue(selfSplit[1]) == getValue(otherSplit[1]))
+                    if(getValue(selfSplit[2]) == getValue(otherSplit[2]))
+                        if( getValue(selfSplit[3]) == getValue(otherSplit[3]) )
+                            return getValue(selfSplit[4]) - getValue(otherSplit[4]);
+                        else return getValue(selfSplit[3]) - getValue(otherSplit[3]);
+                    else return getValue(selfSplit[2]) - getValue(otherSplit[2]);
+                else return getValue(selfSplit[1]) - getValue(otherSplit[1]);
+            }
+            //high card tie-breaking
+            else {
+                if(getValue(selfSplit[1]) == getValue(otherSplit[1]))
+                    if(getValue(selfSplit[2]) == getValue(otherSplit[2]))
+                        if( getValue(selfSplit[3]) == getValue(otherSplit[3]) )
+                            if(getValue(selfSplit[4]) == getValue(otherSplit[4]))
+                                return getValue(selfSplit[5]) - getValue(otherSplit[5]);
+                            else return getValue(selfSplit[4]) - getValue(otherSplit[4]);
+                        else return getValue(selfSplit[3]) - getValue(otherSplit[3]);
+                    else return getValue(selfSplit[2]) - getValue(otherSplit[2]);
+                else return getValue(selfSplit[1]) - getValue(otherSplit[1]);
+            }
+        }
     }
 
     @Override
     public void addCards(Cardable[] cards) {
-
+        this.cards.addAll(Arrays.asList(cards));
     }
 
     private int getValue(String string){
@@ -154,13 +203,13 @@ public class Hand implements Handable , TestableHand{
         String s = "Four Of A Kind,";
         if( getValue(cards.get(0).toString())==getValue(cards.get(3).toString()) ){
             s+=cards.get(0).toString().substring(0,cards.get(0).toString().length()-1); //value of the matching card
-            s+="-"+cards.get(4).toString().substring(0,cards.get(4).toString().length()-1); //value of the kicker
+            s+=","+cards.get(4).toString().substring(0,cards.get(4).toString().length()-1); //value of the kicker
             sort();//resorting as isFourOfAKind sorts by value
             return s;
         }
         else if( getValue(cards.get(1).toString())==getValue(cards.get(4).toString()) ){
             s+=cards.get(1).toString().substring(0,cards.get(1).toString().length()-1); //value of the matching card
-            s+="-"+cards.get(0).toString().substring(0,cards.get(0).toString().length()-1); //value of the kicker
+            s+=","+cards.get(0).toString().substring(0,cards.get(0).toString().length()-1); //value of the kicker
             sort();//resorting as isFourOfAKind sorts by value
             return s;
         }
@@ -175,14 +224,14 @@ public class Hand implements Handable , TestableHand{
         if( getValue(cards.get(0).toString())==getValue(cards.get(2).toString()) &&
                 getValue(cards.get(3).toString())==getValue(cards.get(4).toString()) ){
             s+=cards.get(0).toString().substring(0,cards.get(0).toString().length()-1); //value of the three matching card
-            s+=" on "+cards.get(4).toString().substring(0,cards.get(4).toString().length()-1); //value of the two matching cards
+            s+=","+cards.get(4).toString().substring(0,cards.get(4).toString().length()-1); //value of the two matching cards
             sort();//resorting as isFourOfAKind sorts by value
             return s;
         }
         else if( getValue(cards.get(0).toString())==getValue(cards.get(1).toString()) &&
                 getValue(cards.get(2).toString())==getValue(cards.get(4).toString()) ){
             s+=cards.get(2).toString().substring(0,cards.get(2).toString().length()-1); //value of the three matching card
-            s+="-"+cards.get(0).toString().substring(0,cards.get(0).toString().length()-1); //value of the two matching cards
+            s+=","+cards.get(0).toString().substring(0,cards.get(0).toString().length()-1); //value of the two matching cards
             sort();//resorting as isFourOfAKind sorts by value
             return s;
         }
@@ -220,7 +269,7 @@ public class Hand implements Handable , TestableHand{
         else if( getValue(cards.get(4).toString()) - getValue(cards.get(1).toString()) == 3 &&
                 getValue(cards.get(4).toString()) == 13 && getValue(cards.get(0).toString()) == 1){
             sort();
-            return "Straight, A high";
+            return "Straight,A high";
         }
         else {
             sort();
@@ -232,16 +281,22 @@ public class Hand implements Handable , TestableHand{
         String s = "Three Of A Kind,";
         if( getValue(cards.get(0).toString())==getValue(cards.get(2).toString()) ){
             s+=cards.get(0).toString().substring(0,cards.get(0).toString().length()-1); //value of the matching card
+            s+=","+cards.get(4).toString().substring(0,cards.get(4).toString().length()-1);
+            s+=","+cards.get(3).toString().substring(0,cards.get(3).toString().length()-1);
             sort();//resorting as isFourOfAKind sorts by value
             return s;
         }
         else if( getValue(cards.get(1).toString())==getValue(cards.get(3).toString()) ){
             s+=cards.get(1).toString().substring(0,cards.get(1).toString().length()-1); //value of the matching card
+            s+=","+cards.get(4).toString().substring(0,cards.get(4).toString().length()-1);
+            s+=","+cards.get(0).toString().substring(0,cards.get(0).toString().length()-1);
             sort();//resorting as isFourOfAKind sorts by value
             return s;
         }
         else if( getValue(cards.get(2).toString())==getValue(cards.get(4).toString()) ){
             s+=cards.get(2).toString().substring(0,cards.get(2).toString().length()-1); //value of the matching card
+            s+=","+cards.get(1).toString().substring(0,cards.get(1).toString().length()-1);
+            s+=","+cards.get(0).toString().substring(0,cards.get(0).toString().length()-1);
             sort();//resorting as isFourOfAKind sorts by value
             return s;
         }
@@ -335,5 +390,20 @@ public class Hand implements Handable , TestableHand{
         }
         sort();
         return ret.toString();
+    }
+
+    private int ranking(String s){
+        switch (s) {
+            case "Royal Flush": return 1;
+            case "Straight Flush": return 2;
+            case "Four Of A Kind": return 3;
+            case "Full House": return 4;
+            case "Flush": return 5;
+            case "Straight": return 6;
+            case "Three Of A Kind": return 7;
+            case "Two Pairs": return 8;
+            case "Pairs": return 9;
+            default: return 10;
+        }
     }
 }
