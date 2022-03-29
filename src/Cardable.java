@@ -18,4 +18,8 @@ public interface Cardable
 	public void resetSelected();  //Sets selected state to false (the default state).
 	
 	public void setFaceUp(boolean faceUp);  //Sets the faceUp to what is received as a parameter.
+
+	public int getValue();
+	public String getValueString();
+	public int getSuitValue();
 }

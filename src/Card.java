@@ -42,6 +42,24 @@ public class Card implements Cardable{
     }
 
     @Override
+    public int getValue() {
+        return value;
+    }
+
+    @Override
+    public String getValueString() {
+        return toString().substring(0,toString().length()-1);
+    }
+
+    @Override
+    public int getSuitValue() {
+        if(suit == Suit.CLUB) return 0;
+        else if(suit == Suit.DIAMOND) return 1;
+        else if(suit == Suit.HEART) return 2;
+        else return 3;
+    }
+
+    @Override
     public String toString(){
         String returnString = "";
 
