@@ -35,7 +35,7 @@ public class PokerTableDisplay {
 	
 	
 	//Constructor:
-	public PokerTableDisplay(GameLogicable gl) {
+	public PokerTableDisplay(GameLogicable gl) throws Exception {
 		gameLogic = gl;
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();  //get screen size
 		initJFrame();
@@ -86,12 +86,12 @@ public class PokerTableDisplay {
 		contentPanel.add(centerPanel, BorderLayout.CENTER);
 		
 		//Adding the CPU hand:
-		humanHD = new HandDisplay(gameLogic.getCPUHand(), false);
-		contentPanel.add(humanHD, BorderLayout.NORTH);
+		cpuHD = new HandDisplay(gameLogic.getHumanHand(), false);
+		contentPanel.add(cpuHD, BorderLayout.NORTH);
 		
 		//Adding the human hand:
-		cpuHD = new HandDisplay(gameLogic.getHumanHand(), true);
-		contentPanel.add(cpuHD, BorderLayout.SOUTH);
+		humanHD = new HandDisplay(gameLogic.getCPUHand(), true);
+		contentPanel.add(humanHD, BorderLayout.SOUTH);
 		
 		//Creating the frame
 		JFrame frame = new JFrame("5-card draw Poker");
@@ -104,7 +104,7 @@ public class PokerTableDisplay {
 	}
 	
 	//To run the game and update the interface according to the game logic
-	public void runGame() {
+	public void runGame() throws Exception {
 		String[] messages;
 		while(true){ //to turn off the game, click on the X to close the window
 			messages = new String[NUM_MESSAGE_ROWS]; //emptying the array by creating a new one
@@ -125,7 +125,7 @@ public class PokerTableDisplay {
 			}
 			else {
 				actionButton.setEnabled(false);
-				wait(2);
+				wait(1);
 			}
 		}
 	}

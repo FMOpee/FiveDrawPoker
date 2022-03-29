@@ -26,13 +26,13 @@ public class Deck implements Deckable{
 
     @Override
     public void returnToDeck(LinkedList<Cardable> discarded) throws Exception {
-        if(deck.size()+discarded.size()!=NUM_CARDS) {
-            throw new Exception("something clearly gone wrong in the deck size");
-        }
-        else {
+//        if(deck.size()+discarded.size()!=NUM_CARDS) {
+//            throw new Exception("something clearly gone wrong in the deck size");
+//        }
+//        else {
             deck.addAll(discarded);
             shuffle();
-        }
+//        }
 
     }
 
