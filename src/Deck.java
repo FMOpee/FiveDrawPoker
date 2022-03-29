@@ -25,9 +25,15 @@ public class Deck implements Deckable{
     }
 
     @Override
-    public void returnToDeck(LinkedList<Cardable> discarded) {
-        deck.addAll(discarded);
-        shuffle();
+    public void returnToDeck(LinkedList<Cardable> discarded) throws Exception {
+        if(deck.size()+discarded.size()!=NUM_CARDS) {
+            throw new Exception("something clearly gone wrong in the deck size");
+        }
+        else {
+            deck.addAll(discarded);
+            shuffle();
+        }
+
     }
 
     @Override
@@ -37,7 +43,7 @@ public class Deck implements Deckable{
         return card;
     }
 
-    public Deck getInstance(){
+    public static Deck getInstance(){
         if(instance == null)
             instance = new Deck();
         return instance;

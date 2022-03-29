@@ -12,12 +12,12 @@ public class Card implements Cardable{
     }
 
     @Override
-    public boolean getSelected() {
+    public boolean isSelected() {
         return selected;
     }
 
     @Override
-    public boolean getFaceUp() {
+    public boolean isFaceUp() {
         return faceUp;
     }
 

@@ -260,7 +260,7 @@ public class PokerTableDisplay
 				return;
 			}
 				
-			if (theCard.getSelected())
+			if (theCard.isSelected())
 				g.setColor(Color.LIGHT_GRAY);
 			else
 				g.setColor(Color.WHITE);
@@ -268,7 +268,7 @@ public class PokerTableDisplay
 			g.setColor(Color.BLACK);
 			g.drawRoundRect(0, 0, width, height, 5, 5);
 			
-			if (theCard.getFaceUp())
+			if (theCard.isFaceUp())
 			{
 				Card.Suit theSuit = theCard.getSuit();
 				if(theSuit == Card.Suit.HEART || theSuit == Card.Suit.DIAMOND)

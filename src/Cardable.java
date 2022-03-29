@@ -7,9 +7,9 @@ public interface Cardable
 	public enum Suit {HEART, DIAMOND, SPADE, CLUB};
 	
 	//Methods:
-	public boolean getSelected();  //Returns the selected state: selected (true) or not selected (false).
+	public boolean isSelected();  //Returns the selected state: selected (true) or not selected (false).
 	
-	public boolean getFaceUp();  //Returns true if the face is up, false if it is facing down.
+	public boolean isFaceUp();  //Returns true if the face is up, false if it is facing down.
 	
 	public Suit getSuit();  //Returns the suit.
 	
