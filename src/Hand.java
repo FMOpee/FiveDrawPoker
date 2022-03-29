@@ -1,7 +1,7 @@
 import java.util.LinkedList;
 
 public class Hand implements TestableHand{
-    private Cardable[] cards = new Cardable[5];
+    private Cardable[] cards = new Cardable[HAND_SIZE];
 
     public Hand(){
         for(int i =0; i<5;i++) {
@@ -127,8 +127,6 @@ public class Hand implements TestableHand{
     public void addCards(Cardable[] cards) {
         this.cards=cards;
     }
-
-
 
     private int valueToInt(String string){
         if(string.charAt(0) == 'A')
