@@ -347,7 +347,7 @@ public class Hand implements TestableHand{
         }
 
         if(first){
-            StringBuilder ret = new StringBuilder("Pairs,");
+            StringBuilder ret = new StringBuilder("Pair,");
             ret.append(cards[firstPos].getValueString()); //value of the smaller pair;
             for (int i=4; i>=0;i--){
                 if(i==firstPos+1) i--;
@@ -388,7 +388,7 @@ public class Hand implements TestableHand{
             case "Straight": return 6;
             case "Three Of A Kind": return 7;
             case "Two Pairs": return 8;
-            case "Pairs": return 9;
+            case "Pair": return 9;
             default: return 10;
         }
     }
