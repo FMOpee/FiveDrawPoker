@@ -79,8 +79,8 @@ public class Hand implements TestableHand{
             return ranking(otherSplit[0]) - ranking(selfSplit[0]);
         }
         else {
-            //straight flush , straight, flush tie-breaking
-            if(ranking(selfSplit[0]) == 2 || ranking(selfSplit[0]) == 5 || ranking(selfSplit[0]) == 6){
+            //straight flush, flush, straight tie-breaking
+            if(ranking(selfSplit[0]) == 2 || ranking(selfSplit[0]) == 6 || ranking(selfSplit[0]) == 5){
                 return valueToInt(selfSplit[1]) - valueToInt(otherSplit[1]);
             }
             //Four of a kind and full house tie-breaker
@@ -107,8 +107,8 @@ public class Hand implements TestableHand{
                     else return valueToInt(selfSplit[2]) - valueToInt(otherSplit[2]);
                 else return valueToInt(selfSplit[1]) - valueToInt(otherSplit[1]);
             }
-            //high card tie-breaking
-            else if(ranking(selfSplit[0]) == 10) {
+            //high card, flush tie-breaking
+            else if(ranking(selfSplit[0]) == 10 ) {
                 if(valueToInt(selfSplit[1]) == valueToInt(otherSplit[1]))
                     if(valueToInt(selfSplit[2]) == valueToInt(otherSplit[2]))
                         if( valueToInt(selfSplit[3]) == valueToInt(otherSplit[3]) )
@@ -129,16 +129,12 @@ public class Hand implements TestableHand{
     }
 
     private int valueToInt(String string){
-        if(string.charAt(0) == 'A')
-            return 1;
-        else if (string.charAt(0) == 'K')
-            return 13;
-        else if (string.charAt(0) == 'Q')
-            return 12;
-        else if (string.charAt(0) == 'J')
-            return 11;
-        else {
-            return Integer.parseInt(string);
+        switch (string) {
+            case "A": return 14;
+            case "K": return 13;
+            case "Q": return 12;
+            case "J": return 11;
+            default: return Integer.parseInt(string);
         }
     }
 
