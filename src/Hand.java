@@ -244,6 +244,7 @@ public class Hand implements TestableHand{
         }
     }
     private String isFlush(){
+        sort();
         boolean flag = cards[0].getSuit() == cards[4].getSuit();   //of the same suit
         sortByValue();
         if(flag){

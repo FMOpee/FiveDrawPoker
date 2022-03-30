@@ -125,7 +125,7 @@ public class PokerTableDisplay {
 			}
 			else {
 				actionButton.setEnabled(false);
-				wait(1);
+				wait(2);
 			}
 		}
 	}
