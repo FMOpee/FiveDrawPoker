@@ -18,4 +18,8 @@ public interface Handable extends Comparable<Handable>
 	public LinkedList<Cardable> returnCards();  //This method will be called at the end of a round to empty the hand (discard the full hand, not considering the selected state). It returns a LinkedList<Cardable> containing all the cards that were in the hand.
 	
 	public String evaluateHand();  //This method evaluates what is in the hand, and returns a String description of the best poker hand that can be made with these cards.
+
+	public void sortByValue();
+
+	public void sort();
 }

@@ -142,7 +142,7 @@ public class Hand implements TestableHand{
         }
     }
 
-    private void sort(){
+    public void sort(){
         for (int i=0; i<cards.length;i++){
             for (int j=i+1; j<cards.length; j++){
                 if( cards[i].getSuitValue() > cards[j].getSuitValue() ){
@@ -159,7 +159,7 @@ public class Hand implements TestableHand{
             }
         }
     }
-    private void sortByValue(){
+    public void sortByValue(){
         for (int i=0; i<cards.length;i++){
             for (int j=i+1; j<cards.length; j++){
                 if( cards[i].getValue() > cards[j].getValue() ){

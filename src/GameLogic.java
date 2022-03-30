@@ -8,8 +8,8 @@ public class GameLogic implements GameLogicable{
     private int cpuWon = 0;
     private int totalPlayed = 0;
     private final Deckable deck;
-    private final String humanName = "Very Human Sounding Name";
-    private final String cpuName = "Super Smart Ninja AI";
+    private final String humanName = "Player 1";
+    private String cpuName = "Dumb CPU";
 
     public GameLogic(){
         deck = Deck.getInstance();
@@ -66,7 +66,7 @@ public class GameLogic implements GameLogicable{
         return false;
     }
     private boolean state2(String[] messages) throws Exception {
-        randomSelect();
+        selectForCPU(false);
         LinkedList<Cardable> discarded = cpuHand.discard();
         deck.returnToDeck(discarded);
         deck.shuffle();
@@ -119,12 +119,148 @@ public class GameLogic implements GameLogicable{
     }
 
 
-
+    //
+    private void selectForCPU(boolean isRandom){
+        if(isRandom) randomSelect();
+        else smartSelect();
+    }
     //method to select at random for cpu
     private void randomSelect(){
+        cpuName = "Dumb CPU";
         for(int i=0; i<5; i++){
             if(Math.random()>.5 && !cpuHand.getCard(i).isSelected())
                 cpuHand.getCard(i).switchSelectedState();
         }
+    }
+    //method to select
+    private void smartSelect(){
+        cpuName = "Smart CPU";
+        double royalFlushScore = 20; // these values are the log of 1/probability
+        boolean[] royalFlushSelected = new boolean[]{true,true,true,true,true};
+        double straightFlushScore = 16;
+        boolean[] straightFlushSelected = new boolean[]{true,true,true,true,true};
+        double fourOfAKindScore = 12;
+        boolean[] fourOfAKindSelected = new boolean[]{true,true,true,true,true};
+        double fullHouseScore = 10;
+        boolean[] fullHouseSelected = new boolean[]{true,true,true,true,true};
+        double flushScore = 9;
+        boolean[] flushSelected = new boolean[]{true,true,true,true,true};
+        double straightScore = 8;
+        boolean[] straightSelected = new boolean[]{true,true,true,true,true};
+        double threeOfAKindScore = 6;
+        boolean[] threeOfAKindSelected = new boolean[]{true,true,true,true,true};
+        double twoPairsScore = 4;
+        boolean[] twoPairsSelected = new boolean[]{true,true,true,true,true};
+        double pairScore = 1;
+        boolean[] pairSelected = new boolean[]{true,true,true,true,true};
+//        double highCardScore = 0;
+//        boolean[] highCardSelected = new boolean[]{false,false,false,false,false};
+
+        cpuHand.sortByValue();
+        /****************** royal flush ***********************/
+        double multiplier = 0;
+        for(int i=0; i<Handable.HAND_SIZE;i++){
+            if(cpuHand.getCard(i).getValue() == 1 ||
+                    cpuHand.getCard(i).getValue() == 10||
+                    cpuHand.getCard(i).getValue() == 11||
+                    cpuHand.getCard(i).getValue() == 12||
+                    cpuHand.getCard(i).getValue() == 13
+            ) {
+                multiplier += .2;
+                royalFlushSelected[i] = false;
+            }
+        }
+        royalFlushScore *= multiplier;
+        /**************** straight flush *************************/
+        multiplier = 0;
+        for(int i=4; i>=1;i--){
+            if(cpuHand.getCard(i).getValue() - cpuHand.getCard(i-1).getValue() == 1){
+                multiplier += .2;
+                straightFlushSelected[i] = false;
+            }
+        }
+        straightFlushScore *= multiplier;
+        /**************** four of a kind **********************/
+        multiplier = 0;
+        for(int i=0; i<4;i++){
+            if(cpuHand.getCard(i).getValue() == cpuHand.getCard(i+1).getValue()){
+                multiplier += .3;
+                fourOfAKindSelected[i] = false;
+            }
+        }
+        fourOfAKindScore *= multiplier;
+        /*************** full house **********************/
+        multiplier = 0;
+        for(int i=0; i<4;i++){
+            if(cpuHand.getCard(i).getValue() == cpuHand.getCard(i+1).getValue()){
+                multiplier += .25;
+                fullHouseSelected[i] = false;
+            }
+        }
+        fullHouseScore *= multiplier;
+        /************** flush ************************/
+        multiplier = 0;
+        for(int i=0; i<4;i++){
+            if(cpuHand.getCard(i).getSuit() == cpuHand.getCard(i+1).getSuit()){
+                multiplier += .2;
+                flushSelected[i] = false;
+            }
+        }
+        flushScore *= multiplier;
+        /************ straight **********************/
+        multiplier = 0;
+        for(int i=0; i<4;i++){
+            if(cpuHand.getCard(i).getValue() - cpuHand.getCard(i+1).getValue() == -1){
+                multiplier += .2;
+                straightSelected[i] = false;
+            }
+        }
+        straightScore *= multiplier;
+        /************** three of a kind ****************/
+        multiplier = 0;
+        for(int i=0; i<4;i++){
+            if(cpuHand.getCard(i).getValue() == cpuHand.getCard(i+1).getValue()){
+                multiplier += .45;
+                threeOfAKindSelected[i] = false;
+            }
+        }
+        threeOfAKindScore *= multiplier;
+        /************* two pair ******************/
+        multiplier = 0;
+        for(int i=0; i<4;i++){
+            if(cpuHand.getCard(i).getValue() == cpuHand.getCard(i+1).getValue()){
+                multiplier += .5;
+                twoPairsSelected[i] = false;
+            }
+        }
+        twoPairsScore *= multiplier;
+        /************ pair *********************/
+        multiplier = 0;
+        for (int i=0; i<4;i++){
+            if(cpuHand.getCard(i).getValue() == cpuHand.getCard(i+1).getValue()){
+                multiplier += 1;
+                pairSelected[i] = false;
+            }
+        }
+        pairScore *= multiplier;
+
+        //comparing the scores
+        int[] rankings = new int[]{0,1,2,3,4,5,6,7,8};
+        double[] scores = new double[]{royalFlushScore,straightFlushScore,fourOfAKindScore,fullHouseScore,flushScore,straightScore,threeOfAKindScore,twoPairsScore,pairScore};
+        boolean[][] selected = new boolean[][]{royalFlushSelected,straightFlushSelected,fourOfAKindSelected,fullHouseSelected,flushSelected,straightSelected,threeOfAKindSelected,twoPairsSelected,pairSelected};
+        for(int i=0; i<rankings.length; i++){
+            for(int j=i+1; j<rankings.length; j++){
+                if(scores[rankings[i]] < scores[rankings[j]]){
+                    int temp = rankings[i];
+                    rankings[i] = rankings[j];
+                    rankings[j] = temp;
+                }
+            }
+        }
+        for(int i = 0; i<5; i++){
+            if(selected[rankings[0]][i] && !cpuHand.getCard(i).isSelected())
+                cpuHand.getCard(i).switchSelectedState();
+        }
+
     }
 }
