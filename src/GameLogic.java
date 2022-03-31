@@ -32,8 +32,8 @@ public class GameLogic implements GameLogicable{
     }
 
     @Override
-    public boolean nextState(String[] messages) throws Exception {
-        boolean nextState = true;
+    public boolean nextState(String[] messages){
+        boolean nextState;
         if(currentState==0) nextState = state0(messages);
         else if(currentState==1) nextState = state1(messages);
         else if(currentState==2) nextState = state2(messages);
@@ -57,7 +57,7 @@ public class GameLogic implements GameLogicable{
         messages[2] = "and Click on Proceed Button";
         return true;
     }
-    private boolean state1(String[] messages) throws Exception {
+    private boolean state1(String[] messages){
         messages[0] = humanName+" discarded the cards";
         messages[1] = cpuName+" is \"thinking\"";
         LinkedList<Cardable> discarded = humanHand.discard();
@@ -65,8 +65,8 @@ public class GameLogic implements GameLogicable{
         deck.shuffle();
         return false;
     }
-    private boolean state2(String[] messages) throws Exception {
-        selectForCPU(false);
+    private boolean state2(String[] messages){
+        selectForCPU(false);    /************ change the false to true for making it not random *********/
         LinkedList<Cardable> discarded = cpuHand.discard();
         deck.returnToDeck(discarded);
         deck.shuffle();
@@ -107,7 +107,7 @@ public class GameLogic implements GameLogicable{
         messages[3] = humanName+" won: "+humanWon+". "+cpuName+" won: "+cpuWon;
         return true;
     }
-    private boolean state5(String[] messages) throws Exception {
+    private boolean state5(String[] messages){
         deck.returnToDeck(humanHand.returnCards());
         deck.returnToDeck(cpuHand.returnCards());
         deck.shuffle();
