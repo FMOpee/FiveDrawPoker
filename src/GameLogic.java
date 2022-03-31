@@ -66,7 +66,7 @@ public class GameLogic implements GameLogicable{
         return false;
     }
     private boolean state2(String[] messages){
-        selectForCPU(false);    /************ change the false to true for making it not random *********/
+        selectForCPU(true);    /************ change the false to true for making it random *********/
         LinkedList<Cardable> discarded = cpuHand.discard();
         deck.returnToDeck(discarded);
         deck.shuffle();
