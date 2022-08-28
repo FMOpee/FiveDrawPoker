@@ -129,13 +129,13 @@ public class Hand implements TestableHand{
     }
 
     private int valueToInt(String string){
-        switch (string) {
-            case "A": return 14;
-            case "K": return 13;
-            case "Q": return 12;
-            case "J": return 11;
-            default: return Integer.parseInt(string);
-        }
+        return switch (string) {
+            case "A" -> 14;
+            case "K" -> 13;
+            case "Q" -> 12;
+            case "J" -> 11;
+            default -> Integer.parseInt(string);
+        };
     }
 
     public void sort(){
@@ -379,17 +379,17 @@ public class Hand implements TestableHand{
     }
 
     private int ranking(String s){
-        switch (s) {
-            case "Royal Flush": return 1;
-            case "Straight Flush": return 2;
-            case "Four Of A Kind": return 3;
-            case "Full House": return 4;
-            case "Flush": return 5;
-            case "Straight": return 6;
-            case "Three Of A Kind": return 7;
-            case "Two Pairs": return 8;
-            case "Pair": return 9;
-            default: return 10;
-        }
+        return switch (s) {
+            case "Royal Flush" -> 1;
+            case "Straight Flush" -> 2;
+            case "Four Of A Kind" -> 3;
+            case "Full House" -> 4;
+            case "Flush" -> 5;
+            case "Straight" -> 6;
+            case "Three Of A Kind" -> 7;
+            case "Two Pairs" -> 8;
+            case "Pair" -> 9;
+            default -> 10;
+        };
     }
 }
